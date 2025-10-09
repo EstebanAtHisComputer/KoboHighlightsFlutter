@@ -80,9 +80,18 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<String> entries = <String>['a', 'b', 'c'];
   int selectedIndex = -1;
+  List<Highlight> selectedHighlights = [];
+  String selectedTitle = "Kobo Highlights";
 
   void _onLayoutDone(_) async {
     _scaffoldKey.currentState!.openDrawer();
+  }
+
+  void _changeSelected(index) {
+    selectedIndex = index;
+    selectedHighlights = sorted.entries.elementAt(index).value;
+    selectedTitle =
+        "${sorted.keys.elementAt(index).$1} - ${sorted.keys.elementAt(index).$2}";
   }
 
   @override
@@ -95,12 +104,13 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      appBar: AppBar(title: Text(selectedTitle)),
       body: Center(
-        child: FilledButton(
-          onPressed: () {
-            _scaffoldKey.currentState!.openDrawer();
+        child: ListView.builder(
+          itemCount: selectedHighlights.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(title: Text(selectedHighlights[index].text));
           },
-          child: Text("Selected item:$selectedIndex"),
         ),
       ),
       drawer: Drawer(
@@ -113,7 +123,7 @@ class _MainPageState extends State<MainPage> {
                 subtitle: Text(sorted.keys.elementAt(index).$2.toString()),
                 onTap: () {
                   setState(() {
-                    selectedIndex = index;
+                    _changeSelected(index);
                   });
                   _scaffoldKey.currentState!.closeDrawer();
                 },
