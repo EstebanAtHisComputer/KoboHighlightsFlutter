@@ -1,4 +1,6 @@
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:kobo_highlights/db.dart';
 import 'package:window_manager_plus/window_manager_plus.dart';
 
 void main() async {
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
+void jumpToMain() {}
+
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
@@ -46,7 +50,13 @@ class IntroPage extends StatelessWidget {
           children: [
             const Image(image: AssetImage("assets/logo.png")),
             FilledButton(
-              onPressed: () {
+              onPressed: () async {
+                XFile? file = await openFile();
+                if (file != null) {
+                  print(file.path);
+                  await tryDB(file.path);
+                }
+
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => const MainPage()),
                 );
@@ -73,7 +83,7 @@ class _MainPageState extends State<MainPage> {
   final List<String> entries = <String>['a', 'b', 'c'];
   int selectedIndex = -1;
 
-  void _onLayoutDone(_) {
+  void _onLayoutDone(_) async {
     _scaffoldKey.currentState!.openDrawer();
   }
 
