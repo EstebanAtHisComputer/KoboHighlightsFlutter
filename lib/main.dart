@@ -106,14 +106,16 @@ class _MainPageState extends State<MainPage> {
       drawer: Drawer(
         child: Center(
           child: ListView.builder(
-            itemCount: entries.length,
+            itemCount: highlights.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text(entries[index]),
+                title: Text(sorted.keys.elementAt(index).$1.toString()),
+                subtitle: Text(sorted.keys.elementAt(index).$2.toString()),
                 onTap: () {
                   setState(() {
                     selectedIndex = index;
                   });
+                  _scaffoldKey.currentState!.closeDrawer();
                 },
               );
             },

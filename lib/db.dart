@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class Highlight {
@@ -12,6 +14,7 @@ class Highlight {
 }
 
 Map<(String, String), List<Highlight>> highlights = {};
+var sorted = SplayTreeMap<(String, String), dynamic>();
 
 Future tryDB(String filePath) async {
   sqfliteFfiInit();
@@ -40,5 +43,8 @@ text is not null;
         );
   }
 
-  return highlights;
+  sorted = SplayTreeMap<(String, String), dynamic>.from(
+    highlights,
+    (a, b) => a.$1.compareTo(b.$1),
+  );
 }
