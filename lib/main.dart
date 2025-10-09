@@ -69,8 +69,49 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final List<String> entries = <String>['a', 'b', 'c'];
+  int selectedIndex = -1;
+
+  void _onLayoutDone(_) {
+    _scaffoldKey.currentState!.openDrawer();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(_onLayoutDone);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: const Text("this is the main page")));
+    return Scaffold(
+      key: _scaffoldKey,
+      body: Center(
+        child: FilledButton(
+          onPressed: () {
+            _scaffoldKey.currentState!.openDrawer();
+          },
+          child: Text("Selected item:$selectedIndex"),
+        ),
+      ),
+      drawer: Drawer(
+        child: Center(
+          child: ListView.builder(
+            itemCount: entries.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(entries[index]),
+                onTap: () {
+                  setState(() {
+                    selectedIndex = index;
+                  });
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
   }
 }
