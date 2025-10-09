@@ -13,8 +13,9 @@ class Highlight {
   });
 }
 
-Map<(String, String), List<Highlight>> highlights = {};
-var sorted = SplayTreeMap<(String, String), dynamic>();
+var highlights = SplayTreeMap<(String, String), List<Highlight>>(
+  (key1, key2) => key1.$1.compareTo(key2.$1),
+);
 
 Future tryDB(String filePath) async {
   sqfliteFfiInit();
@@ -42,9 +43,4 @@ text is not null;
           ),
         );
   }
-
-  sorted = SplayTreeMap<(String, String), dynamic>.from(
-    highlights,
-    (a, b) => a.$1.compareTo(b.$1),
-  );
 }

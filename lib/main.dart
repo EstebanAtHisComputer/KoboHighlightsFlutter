@@ -88,10 +88,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _changeSelected(index) {
+    //TODO: Refactor this.
     selectedIndex = index;
-    selectedHighlights = sorted.entries.elementAt(index).value;
+    selectedHighlights = highlights.entries.elementAt(index).value;
     selectedTitle =
-        "${sorted.keys.elementAt(index).$1} - ${sorted.keys.elementAt(index).$2}";
+        "${highlights.keys.elementAt(index).$1} - ${highlights.keys.elementAt(index).$2}";
   }
 
   @override
@@ -119,8 +120,8 @@ class _MainPageState extends State<MainPage> {
             itemCount: highlights.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text(sorted.keys.elementAt(index).$1.toString()),
-                subtitle: Text(sorted.keys.elementAt(index).$2.toString()),
+                title: Text(highlights.keys.elementAt(index).$1.toString()),
+                subtitle: Text(highlights.keys.elementAt(index).$2.toString()),
                 onTap: () {
                   setState(() {
                     _changeSelected(index);
