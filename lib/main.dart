@@ -53,13 +53,11 @@ class IntroPage extends StatelessWidget {
               onPressed: () async {
                 XFile? file = await openFile();
                 if (file != null) {
-                  print(file.path);
                   await tryDB(file.path);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const MainPage()),
+                  );
                 }
-
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const MainPage()),
-                );
               },
               child: const Text("Open"),
             ),
