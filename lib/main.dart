@@ -134,7 +134,7 @@ class _MainPageState extends State<MainPage> {
             },
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text(selectedHighlights[index].text),
+                title: SelectableText(selectedHighlights[index].text),
                 shape: BeveledRectangleBorder(
                   side: BorderSide(color: Theme.of(context).primaryColorLight),
                   borderRadius: BorderRadiusGeometry.circular(15.0),
