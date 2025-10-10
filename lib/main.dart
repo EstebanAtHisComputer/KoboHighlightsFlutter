@@ -184,7 +184,49 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text(selectedTitle),
+        toolbarHeight: 72,
+        title: Column(
+          children: [
+            Text(selectedTitle),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                selectedIndex > 0
+                    ? IconButton(
+                        style: ButtonStyle(
+                          mouseCursor: WidgetStatePropertyAll(
+                            SystemMouseCursors.basic,
+                          ),
+                        ),
+                        onPressed: () {
+                          selectedIndex--;
+                          setState(() {
+                            _changeSelected(selectedIndex);
+                          });
+                        },
+                        icon: Icon(Icons.arrow_circle_left_outlined),
+                      )
+                    : SizedBox.shrink(),
+                selectedIndex < highlights.keys.length - 1
+                    ? IconButton(
+                        style: ButtonStyle(
+                          mouseCursor: WidgetStatePropertyAll(
+                            SystemMouseCursors.basic,
+                          ),
+                        ),
+                        onPressed: () {
+                          selectedIndex++;
+                          setState(() {
+                            _changeSelected(selectedIndex);
+                          });
+                        },
+                        icon: Icon(Icons.arrow_circle_right_outlined),
+                      )
+                    : SizedBox.shrink(),
+              ],
+            ),
+          ],
+        ),
         leading: Tooltip(
           message: "Open book list",
           waitDuration: Duration(seconds: 1),
@@ -204,28 +246,6 @@ class _MainPageState extends State<MainPage> {
             waitDuration: Duration(seconds: 1),
             child: MenuAnchor(
               menuChildren: [
-                selectedIndex > 0
-                    ? MenuItemButton(
-                        child: Text("Previous book"),
-                        onPressed: () {
-                          selectedIndex--;
-                          setState(() {
-                            _changeSelected(selectedIndex);
-                          });
-                        },
-                      )
-                    : SizedBox.shrink(),
-                selectedIndex < highlights.keys.length - 1
-                    ? MenuItemButton(
-                        child: Text("Next book"),
-                        onPressed: () {
-                          setState(() {
-                            selectedIndex++;
-                            _changeSelected(selectedIndex);
-                          });
-                        },
-                      )
-                    : SizedBox.shrink(),
                 MenuItemButton(
                   child: Text("Export all"),
                   onPressed: () {
