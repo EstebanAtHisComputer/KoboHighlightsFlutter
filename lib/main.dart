@@ -107,6 +107,32 @@ class _MainPageState extends State<MainPage> {
     ).showSnackBar(SnackBar(content: Text("Copied to clipboard!")));
   }
 
+  void _exportHighlight(BuildContext context, String text) async {
+    final String fileName = "$selectedTitle.txt";
+    final FileSaveLocation? result = await getSaveLocation(
+      suggestedName: fileName,
+      acceptedTypeGroups: [
+        XTypeGroup(label: "Text file", extensions: [".txt"]),
+      ],
+    );
+    if (result == null) {
+      // Operation was canceled by the user.
+      return;
+    }
+
+    final Uint8List fileData = Uint8List.fromList(text.codeUnits);
+    const String mimeType = 'text/plain';
+    final XFile textFile = XFile.fromData(
+      fileData,
+      mimeType: mimeType,
+      name: fileName,
+    );
+    await textFile.saveTo(result.path);
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_onLayoutDone);
@@ -165,7 +191,10 @@ class _MainPageState extends State<MainPage> {
                       MenuItemButton(
                         child: Text("Export"),
                         onPressed: () {
-                          print("Not implemented yet");
+                          _exportHighlight(
+                            context,
+                            selectedHighlights[index].text,
+                          );
                         },
                       ),
                     ],
