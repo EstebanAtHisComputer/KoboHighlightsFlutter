@@ -6,6 +6,29 @@ import 'package:flutter/services.dart';
 import 'package:kobo_highlights/db.dart';
 import 'package:window_manager_plus/window_manager_plus.dart';
 
+Future<void> _errorDialog(BuildContext context, String title, String text) {
+  return showDialog(
+    context: context,
+    requestFocus: true,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        icon: Icon(Icons.error),
+        title: Text(title),
+        content: Text(text),
+        actions: [
+          FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text("Ok"),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await WindowManagerPlus.ensureInitialized(0);
@@ -54,10 +77,18 @@ class IntroPage extends StatelessWidget {
               onPressed: () async {
                 XFile? file = await openFile();
                 if (file != null) {
-                  await tryDB(file.path);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const MainPage()),
-                  );
+                  try {
+                    await tryDB(file.path);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const MainPage()),
+                    );
+                  } catch (e) {
+                    _errorDialog(
+                      context,
+                      "Error loading Database",
+                      e.toString(),
+                    );
+                  }
                 }
               },
               style: ButtonStyle(
