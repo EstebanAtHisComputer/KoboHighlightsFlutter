@@ -84,7 +84,7 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<String> entries = <String>['a', 'b', 'c'];
   int selectedIndex = -1;
-  List<Highlight> selectedHighlights = [];
+  List<String> selectedHighlights = [];
   String selectedTitle = "Kobo Highlights";
 
   void _onLayoutDone(_) async {
@@ -218,7 +218,7 @@ class _MainPageState extends State<MainPage> {
             },
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: SelectableText(selectedHighlights[index].text),
+                title: SelectableText(selectedHighlights[index]),
                 shape: BeveledRectangleBorder(
                   side: BorderSide(color: Theme.of(context).primaryColorLight),
                   borderRadius: BorderRadiusGeometry.circular(15.0),
@@ -231,19 +231,13 @@ class _MainPageState extends State<MainPage> {
                       MenuItemButton(
                         child: Text("Copy to clipboard"),
                         onPressed: () {
-                          _copyToClipboard(
-                            context,
-                            selectedHighlights[index].text,
-                          );
+                          _copyToClipboard(context, selectedHighlights[index]);
                         },
                       ),
                       MenuItemButton(
                         child: Text("Export"),
                         onPressed: () {
-                          _exportHighlight(
-                            context,
-                            selectedHighlights[index].text,
-                          );
+                          _exportHighlight(context, selectedHighlights[index]);
                         },
                       ),
                     ],

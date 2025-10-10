@@ -2,18 +2,7 @@ import 'dart:collection';
 
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-class Highlight {
-  final String title;
-  final String text;
-  final String attribution;
-  const Highlight({
-    required this.title,
-    required this.text,
-    required this.attribution,
-  });
-}
-
-var highlights = SplayTreeMap<(String, String), List<Highlight>>(
+var highlights = SplayTreeMap<(String, String), List<String>>(
   (key1, key2) => key1.$1.compareTo(key2.$1),
 );
 
@@ -22,7 +11,7 @@ Future tryDB(String filePath) async {
   var db = await databaseFactoryFfi.openDatabase(filePath);
   var result = await db.rawQuery('''
   select 
-title, text,annotation, attribution
+title, text, attribution
 from bookmark
 left outer join content
 on (content.contentID=bookmark.VolumeID and content.ContentType=6)
@@ -35,12 +24,6 @@ text is not null;
     final author = entry['Attribution'] as String;
     highlights
         .putIfAbsent((title, author), () => [])
-        .add(
-          Highlight(
-            title: title,
-            text: entry['Text'] as String,
-            attribution: author,
-          ),
-        );
+        .add(entry['Text'] as String);
   }
 }
