@@ -116,7 +116,6 @@ class _MainPageState extends State<MainPage> {
       ],
     );
     if (result == null) {
-      // Operation was canceled by the user.
       return;
     }
 
@@ -158,6 +157,56 @@ class _MainPageState extends State<MainPage> {
             icon: const Icon(Icons.menu_book),
           ),
         ),
+        actions: [
+          Tooltip(
+            message: "More...",
+            waitDuration: Duration(seconds: 1),
+            child: MenuAnchor(
+              menuChildren: [
+                selectedIndex > 0
+                    ? MenuItemButton(
+                        child: Text("Previous book"),
+                        onPressed: () {
+                          selectedIndex--;
+                          setState(() {
+                            _changeSelected(selectedIndex);
+                          });
+                        },
+                      )
+                    : SizedBox.shrink(),
+                selectedIndex < highlights.keys.length - 1
+                    ? MenuItemButton(
+                        child: Text("Next book"),
+                        onPressed: () {
+                          setState(() {
+                            selectedIndex++;
+                            _changeSelected(selectedIndex);
+                          });
+                        },
+                      )
+                    : SizedBox.shrink(),
+                MenuItemButton(
+                  child: Text("Export all"),
+                  onPressed: () {
+                    print("Not implemented yet");
+                  },
+                ),
+              ],
+              builder: (context, controller, child) {
+                return IconButton(
+                  onPressed: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
+                    }
+                  },
+                  icon: const Icon(Icons.more_horiz),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.all(16.0),
