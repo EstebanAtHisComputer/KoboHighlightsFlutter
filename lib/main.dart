@@ -142,14 +142,33 @@ class _MainPageState extends State<MainPage> {
                 trailing: Tooltip(
                   message: "View options",
                   waitDuration: Duration(seconds: 1),
-                  child: IconButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      mouseCursor: WidgetStatePropertyAll(
-                        SystemMouseCursors.basic,
+                  child: MenuAnchor(
+                    menuChildren: [
+                      MenuItemButton(
+                        child: Text("Copy to clipboard"),
+                        onPressed: () {
+                          print("Not implemented yet");
+                        },
                       ),
-                    ),
-                    icon: const Icon(Icons.more_horiz),
+                      MenuItemButton(
+                        child: Text("Export"),
+                        onPressed: () {
+                          print("Not implemented yet");
+                        },
+                      ),
+                    ],
+                    builder: (context, controller, child) {
+                      return IconButton(
+                        onPressed: () {
+                          if (controller.isOpen) {
+                            controller.close();
+                          } else {
+                            controller.open();
+                          }
+                        },
+                        icon: const Icon(Icons.more_horiz),
+                      );
+                    },
                   ),
                 ),
               );
