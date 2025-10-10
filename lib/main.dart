@@ -7,7 +7,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await WindowManagerPlus.ensureInitialized(0);
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(1200, 800),
+    size: Size(855, 861),
     center: true,
     title: "Kobo Highlights",
     titleBarStyle: TitleBarStyle.normal,
@@ -59,6 +59,9 @@ class IntroPage extends StatelessWidget {
                   );
                 }
               },
+              style: ButtonStyle(
+                mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.basic),
+              ),
               child: const Text("Open"),
             ),
             Padding(padding: EdgeInsetsGeometry.all(4.0)),
@@ -105,23 +108,67 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text(selectedTitle)),
-      body: Center(
-        child: ListView.builder(
-          itemCount: selectedHighlights.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ListTile(title: Text(selectedHighlights[index].text));
-          },
+      appBar: AppBar(
+        title: Text(selectedTitle),
+        leading: Tooltip(
+          message: "Open book list",
+          waitDuration: Duration(seconds: 1),
+          child: IconButton(
+            style: ButtonStyle(
+              mouseCursor: WidgetStatePropertyAll(SystemMouseCursors.basic),
+            ),
+            onPressed: () {
+              _scaffoldKey.currentState!.openDrawer();
+            },
+            icon: const Icon(Icons.menu_book),
+          ),
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Center(
+          child: ListView.separated(
+            itemCount: selectedHighlights.length,
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 20.0);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(selectedHighlights[index].text),
+                shape: BeveledRectangleBorder(
+                  side: BorderSide(color: Theme.of(context).primaryColorLight),
+                  borderRadius: BorderRadiusGeometry.circular(15.0),
+                ),
+                trailing: Tooltip(
+                  message: "View options",
+                  waitDuration: Duration(seconds: 1),
+                  child: IconButton(
+                    onPressed: () {},
+                    style: ButtonStyle(
+                      mouseCursor: WidgetStatePropertyAll(
+                        SystemMouseCursors.basic,
+                      ),
+                    ),
+                    icon: const Icon(Icons.more_horiz),
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
       drawer: Drawer(
         child: Center(
-          child: ListView.builder(
+          child: ListView.separated(
             itemCount: highlights.length,
+            separatorBuilder: (context, index) {
+              return const Divider();
+            },
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 title: Text(highlights.keys.elementAt(index).$1.toString()),
                 subtitle: Text(highlights.keys.elementAt(index).$2.toString()),
+                mouseCursor: SystemMouseCursors.basic,
                 onTap: () {
                   setState(() {
                     _changeSelected(index);
