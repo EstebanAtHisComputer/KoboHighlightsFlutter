@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -119,7 +121,8 @@ class _MainPageState extends State<MainPage> {
       return;
     }
 
-    final Uint8List fileData = Uint8List.fromList(text.codeUnits);
+    final Uint8List fileData = utf8.encode(text);
+
     const String mimeType = 'text/plain';
     final XFile textFile = XFile.fromData(
       fileData,
@@ -130,6 +133,11 @@ class _MainPageState extends State<MainPage> {
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+  }
+
+  void _exportAll(BuildContext context) {
+    final String content = selectedHighlights.join("\n\n");
+    _exportHighlight(context, content);
   }
 
   @override
@@ -188,7 +196,7 @@ class _MainPageState extends State<MainPage> {
                 MenuItemButton(
                   child: Text("Export all"),
                   onPressed: () {
-                    print("Not implemented yet");
+                    _exportAll(context);
                   },
                 ),
               ],
