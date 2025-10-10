@@ -1,5 +1,6 @@
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kobo_highlights/db.dart';
 import 'package:window_manager_plus/window_manager_plus.dart';
 
@@ -98,6 +99,14 @@ class _MainPageState extends State<MainPage> {
         "${highlights.keys.elementAt(index).$1} - ${highlights.keys.elementAt(index).$2}";
   }
 
+  void _copyToClipboard(BuildContext context, String text) {
+    String res = "$text ($selectedTitle)";
+    Clipboard.setData(ClipboardData(text: res));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text("Copied to clipboard!")));
+  }
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(_onLayoutDone);
@@ -147,7 +156,10 @@ class _MainPageState extends State<MainPage> {
                       MenuItemButton(
                         child: Text("Copy to clipboard"),
                         onPressed: () {
-                          print("Not implemented yet");
+                          _copyToClipboard(
+                            context,
+                            selectedHighlights[index].text,
+                          );
                         },
                       ),
                       MenuItemButton(
