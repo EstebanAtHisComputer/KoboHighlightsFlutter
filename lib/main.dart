@@ -39,8 +39,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void jumpToMain() {}
-
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});
 
@@ -85,6 +83,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final List<String> entries = <String>['a', 'b', 'c'];
+
+  final ScrollController controller = ScrollController();
+
   int selectedIndex = -1;
   List<String> selectedHighlights = [];
   String selectedTitle = "Kobo Highlights";
@@ -99,6 +100,7 @@ class _MainPageState extends State<MainPage> {
     selectedHighlights = highlights.entries.elementAt(index).value;
     selectedTitle =
         "${highlights.keys.elementAt(index).$1} - ${highlights.keys.elementAt(index).$2}";
+    controller.jumpTo(-60);
   }
 
   void _copyToClipboard(BuildContext context, String text) {
@@ -220,6 +222,7 @@ class _MainPageState extends State<MainPage> {
         padding: EdgeInsets.all(16.0),
         child: Center(
           child: ListView.separated(
+            controller: controller,
             itemCount: selectedHighlights.length,
             separatorBuilder: (context, index) {
               return const SizedBox(height: 20.0);
