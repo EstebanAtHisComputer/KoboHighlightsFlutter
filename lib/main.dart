@@ -130,7 +130,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _changeSelected(index) {
-    //TODO: Refactor this.
     selectedIndex = index;
     selectedHighlights = highlights.entries.elementAt(index).value;
     selectedTitle =
