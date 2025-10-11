@@ -198,35 +198,43 @@ class _MainPageState extends State<MainPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 selectedIndex > 0
-                    ? IconButton(
-                        style: ButtonStyle(
-                          mouseCursor: WidgetStatePropertyAll(
-                            SystemMouseCursors.basic,
+                    ? Tooltip(
+                        message: "Previous book",
+                        waitDuration: Duration(seconds: 1),
+                        child: IconButton(
+                          style: ButtonStyle(
+                            mouseCursor: WidgetStatePropertyAll(
+                              SystemMouseCursors.basic,
+                            ),
                           ),
+                          onPressed: () {
+                            selectedIndex--;
+                            setState(() {
+                              _changeSelected(selectedIndex);
+                            });
+                          },
+                          icon: Icon(Icons.arrow_circle_left_outlined),
                         ),
-                        onPressed: () {
-                          selectedIndex--;
-                          setState(() {
-                            _changeSelected(selectedIndex);
-                          });
-                        },
-                        icon: Icon(Icons.arrow_circle_left_outlined),
                       )
                     : SizedBox.shrink(),
                 selectedIndex < highlights.keys.length - 1
-                    ? IconButton(
-                        style: ButtonStyle(
-                          mouseCursor: WidgetStatePropertyAll(
-                            SystemMouseCursors.basic,
+                    ? Tooltip(
+                        message: "Next book",
+                        waitDuration: Duration(seconds: 1),
+                        child: IconButton(
+                          style: ButtonStyle(
+                            mouseCursor: WidgetStatePropertyAll(
+                              SystemMouseCursors.basic,
+                            ),
                           ),
+                          onPressed: () {
+                            selectedIndex++;
+                            setState(() {
+                              _changeSelected(selectedIndex);
+                            });
+                          },
+                          icon: Icon(Icons.arrow_circle_right_outlined),
                         ),
-                        onPressed: () {
-                          selectedIndex++;
-                          setState(() {
-                            _changeSelected(selectedIndex);
-                          });
-                        },
-                        icon: Icon(Icons.arrow_circle_right_outlined),
                       )
                     : SizedBox.shrink(),
               ],
