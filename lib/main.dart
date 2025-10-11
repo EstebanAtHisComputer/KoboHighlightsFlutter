@@ -79,15 +79,21 @@ class IntroPage extends StatelessWidget {
                 if (file != null) {
                   try {
                     await tryDB(file.path);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const MainPage()),
-                    );
+                    if (context.mounted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const MainPage(),
+                        ),
+                      );
+                    }
                   } catch (e) {
-                    _errorDialog(
-                      context,
-                      "Error loading Database",
-                      e.toString(),
-                    );
+                    if (context.mounted) {
+                      _errorDialog(
+                        context,
+                        "Error loading Database",
+                        e.toString(),
+                      );
+                    }
                   }
                 }
               },
@@ -113,8 +119,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final List<String> entries = <String>['a', 'b', 'c'];
-
   final ScrollController controller = ScrollController();
 
   int selectedIndex = -1;
@@ -163,9 +167,11 @@ class _MainPageState extends State<MainPage> {
       name: fileName,
     );
     await textFile.saveTo(result.path);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+    if (context.mounted) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+    }
   }
 
   void _exportAll(BuildContext context) {
