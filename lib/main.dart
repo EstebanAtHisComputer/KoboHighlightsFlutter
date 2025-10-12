@@ -196,16 +196,20 @@ class _MainPageState extends State<MainPage> {
             CallbackShortcuts(
               bindings: {
                 const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
-                  selectedIndex--;
-                  setState(() {
-                    _changeSelected(selectedIndex);
-                  });
+                  if (selectedIndex > 0) {
+                    selectedIndex--;
+                    setState(() {
+                      _changeSelected(selectedIndex);
+                    });
+                  }
                 },
                 const SingleActivator(LogicalKeyboardKey.arrowRight): () {
-                  selectedIndex++;
-                  setState(() {
-                    _changeSelected(selectedIndex);
-                  });
+                  if (selectedIndex < highlights.keys.length - 1) {
+                    selectedIndex++;
+                    setState(() {
+                      _changeSelected(selectedIndex);
+                    });
+                  }
                 },
               },
               child: Focus(
