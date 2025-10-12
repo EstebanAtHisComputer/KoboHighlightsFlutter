@@ -366,6 +366,9 @@ class _MainPageState extends State<MainPage> {
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
                 title: Text(highlights.keys.elementAt(index).$1.toString()),
+                tileColor: selectedIndex == index
+                    ? Theme.of(context).highlightColor
+                    : Colors.transparent,
                 isThreeLine: true,
                 subtitle: Text(
                   "${highlights.keys.elementAt(index).$2}\n${highlights.values.elementAt(index).length} highlight(s)",
