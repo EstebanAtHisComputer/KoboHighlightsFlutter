@@ -193,50 +193,71 @@ class _MainPageState extends State<MainPage> {
         title: Column(
           children: [
             Text(selectedTitle),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                selectedIndex > 0
-                    ? Tooltip(
-                        message: "Previous book",
-                        waitDuration: Duration(seconds: 1),
-                        child: IconButton(
-                          style: ButtonStyle(
-                            mouseCursor: WidgetStatePropertyAll(
-                              SystemMouseCursors.basic,
+            CallbackShortcuts(
+              bindings: {
+                const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
+                  selectedIndex--;
+                  setState(() {
+                    _changeSelected(selectedIndex);
+                  });
+                },
+                const SingleActivator(LogicalKeyboardKey.arrowRight): () {
+                  selectedIndex++;
+                  setState(() {
+                    _changeSelected(selectedIndex);
+                  });
+                },
+              },
+              child: Focus(
+                autofocus: true,
+                descendantsAreFocusable: false,
+                descendantsAreTraversable: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    selectedIndex > 0
+                        ? Tooltip(
+                            message: "Previous book",
+                            waitDuration: Duration(seconds: 1),
+                            child: IconButton(
+                              style: ButtonStyle(
+                                mouseCursor: WidgetStatePropertyAll(
+                                  SystemMouseCursors.basic,
+                                ),
+                              ),
+                              onPressed: () {
+                                selectedIndex--;
+                                setState(() {
+                                  _changeSelected(selectedIndex);
+                                });
+                              },
+                              icon: Icon(Icons.arrow_circle_left_outlined),
                             ),
-                          ),
-                          onPressed: () {
-                            selectedIndex--;
-                            setState(() {
-                              _changeSelected(selectedIndex);
-                            });
-                          },
-                          icon: Icon(Icons.arrow_circle_left_outlined),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-                selectedIndex < highlights.keys.length - 1
-                    ? Tooltip(
-                        message: "Next book",
-                        waitDuration: Duration(seconds: 1),
-                        child: IconButton(
-                          style: ButtonStyle(
-                            mouseCursor: WidgetStatePropertyAll(
-                              SystemMouseCursors.basic,
+                          )
+                        : SizedBox.shrink(),
+                    selectedIndex < highlights.keys.length - 1
+                        ? Tooltip(
+                            message: "Next book",
+                            waitDuration: Duration(seconds: 1),
+                            child: IconButton(
+                              style: ButtonStyle(
+                                mouseCursor: WidgetStatePropertyAll(
+                                  SystemMouseCursors.basic,
+                                ),
+                              ),
+                              onPressed: () {
+                                selectedIndex++;
+                                setState(() {
+                                  _changeSelected(selectedIndex);
+                                });
+                              },
+                              icon: Icon(Icons.arrow_circle_right_outlined),
                             ),
-                          ),
-                          onPressed: () {
-                            selectedIndex++;
-                            setState(() {
-                              _changeSelected(selectedIndex);
-                            });
-                          },
-                          icon: Icon(Icons.arrow_circle_right_outlined),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-              ],
+                          )
+                        : SizedBox.shrink(),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
