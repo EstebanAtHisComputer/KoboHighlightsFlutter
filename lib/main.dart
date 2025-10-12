@@ -217,7 +217,7 @@ class _MainPageState extends State<MainPage> {
                   children: [
                     selectedIndex > 0
                         ? Tooltip(
-                            message: "Previous book",
+                            message: "Previous book (Left arrow)",
                             waitDuration: Duration(seconds: 1),
                             child: IconButton(
                               style: ButtonStyle(
@@ -237,7 +237,7 @@ class _MainPageState extends State<MainPage> {
                         : SizedBox.shrink(),
                     selectedIndex < highlights.keys.length - 1
                         ? Tooltip(
-                            message: "Next book",
+                            message: "Next book (Right arrow)",
                             waitDuration: Duration(seconds: 1),
                             child: IconButton(
                               style: ButtonStyle(
