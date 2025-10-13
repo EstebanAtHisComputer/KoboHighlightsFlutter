@@ -159,15 +159,11 @@ class _MainPageState extends State<MainPage> {
     if (result == null) {
       return;
     }
-    //TODO: Do we need to do it like this or can we use Dart's own File as we do on the image export?
+
     final Uint8List fileData = utf8.encode(text);
-    const String mimeType = 'text/plain';
-    final XFile textFile = XFile.fromData(
-      fileData,
-      mimeType: mimeType,
-      name: fileName,
-    );
-    await textFile.saveTo(result.path);
+    final file = File(result.path);
+    await file.writeAsBytes(fileData);
+
     if (context.mounted) {
       ScaffoldMessenger.of(
         context,
@@ -459,11 +455,12 @@ class _ExportImageBodyState extends State<ExportImageBody> {
       final file = File(result.path);
       await file.writeAsBytes(pngBytes);
 
-      // show success message
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Image saved successfully')));
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Image saved successfully')),
+        );
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       throw Exception(e);
     }
