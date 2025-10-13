@@ -424,15 +424,12 @@ class ExportImageBody extends StatefulWidget {
 class _ExportImageBodyState extends State<ExportImageBody> {
   final GlobalKey _cardKey = GlobalKey();
 
-  late String text = widget.text;
-  late String title = widget.title;
   bool _bigText = false;
   bool _includeAuthor = true;
 
   //Based on https://medium.com/@henryifebunandu/capture-and-save-flutter-widgets-as-images-a-step-by-step-guide-638e77225f6f
   Future<void> _captureAndSave(BuildContext context) async {
     try {
-      // 1) capture logic
       RenderRepaintBoundary boundary =
           _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 10.0);
@@ -441,8 +438,7 @@ class _ExportImageBodyState extends State<ExportImageBody> {
       );
       Uint8List pngBytes = byteData!.buffer.asUint8List();
 
-      // 2) save image logic
-      final String fileName = "$title.txt";
+      final String fileName = "${widget.title}.png";
       final FileSaveLocation? result = await getSaveLocation(
         suggestedName: fileName,
         acceptedTypeGroups: [
@@ -478,12 +474,12 @@ class _ExportImageBodyState extends State<ExportImageBody> {
               child: Column(
                 children: [
                   Text(
-                    '"$text"',
+                    '"${widget.text}"',
                     style: TextStyle(fontSize: _bigText ? 24 : 16),
                   ),
                   _includeAuthor
                       ? Text(
-                          title,
+                          widget.title,
                           style: TextStyle(fontSize: _bigText ? 16 : 14),
                         )
                       : SizedBox.shrink(),
