@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:kobo_highlights/db.dart';
 import 'package:window_manager_plus/window_manager_plus.dart';
@@ -156,9 +159,8 @@ class _MainPageState extends State<MainPage> {
     if (result == null) {
       return;
     }
-
+    //TODO: Do we need to do it like this or can we use Dart's own File as we do on the image export?
     final Uint8List fileData = utf8.encode(text);
-
     const String mimeType = 'text/plain';
     final XFile textFile = XFile.fromData(
       fileData,
@@ -176,6 +178,20 @@ class _MainPageState extends State<MainPage> {
   void _exportAll(BuildContext context) {
     final String content = selectedHighlights.join("\n\n");
     _exportHighlight(context, content);
+  }
+
+  Future<void> _exportAsImage(BuildContext context, String text) {
+    return showDialog(
+      context: context,
+      requestFocus: true,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text("Export as image"),
+          children: [ExportImageBody(title: selectedTitle, text: text)],
+        );
+      },
+    );
   }
 
   @override
@@ -340,6 +356,12 @@ class _MainPageState extends State<MainPage> {
                           _exportHighlight(context, selectedHighlights[index]);
                         },
                       ),
+                      MenuItemButton(
+                        child: Text("Export as image"),
+                        onPressed: () {
+                          _exportAsImage(context, selectedHighlights[index]);
+                        },
+                      ),
                     ],
                     builder: (context, controller, child) {
                       return IconButton(
@@ -389,6 +411,142 @@ class _MainPageState extends State<MainPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ExportImageBody extends StatefulWidget {
+  final String text;
+  final String title;
+
+  const ExportImageBody({required this.title, required this.text, super.key});
+
+  @override
+  State<ExportImageBody> createState() => _ExportImageBodyState();
+}
+
+class _ExportImageBodyState extends State<ExportImageBody> {
+  final GlobalKey _cardKey = GlobalKey();
+
+  late String text = widget.text;
+  late String title = widget.title;
+  bool _bigText = false;
+  bool _includeAuthor = true;
+
+  //Based on https://medium.com/@henryifebunandu/capture-and-save-flutter-widgets-as-images-a-step-by-step-guide-638e77225f6f
+  Future<void> _captureAndSave(BuildContext context) async {
+    try {
+      // 1) capture logic
+      RenderRepaintBoundary boundary =
+          _cardKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 10.0);
+      ByteData? byteData = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
+      Uint8List pngBytes = byteData!.buffer.asUint8List();
+
+      // 2) save image logic
+      final String fileName = "$title.txt";
+      final FileSaveLocation? result = await getSaveLocation(
+        suggestedName: fileName,
+        acceptedTypeGroups: [
+          XTypeGroup(label: "Image file", extensions: [".png"]),
+        ],
+      );
+      if (result == null) {
+        return;
+      }
+      final file = File(result.path);
+      await file.writeAsBytes(pngBytes);
+
+      // show success message
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Image saved successfully')));
+      Navigator.of(context).pop();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RepaintBoundary(
+          key: _cardKey,
+          child: Card(
+            child: Padding(
+              padding: EdgeInsetsGeometry.all(32),
+              child: Column(
+                children: [
+                  Text(
+                    '"$text"',
+                    style: TextStyle(fontSize: _bigText ? 24 : 16),
+                  ),
+                  _includeAuthor
+                      ? Text(
+                          title,
+                          style: TextStyle(fontSize: _bigText ? 16 : 14),
+                        )
+                      : SizedBox.shrink(),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            SizedBox(
+              width: 225,
+              child: SwitchListTile(
+                value: _bigText,
+                onChanged: (b) {
+                  setState(() {
+                    _bigText = b;
+                  });
+                },
+                title: Text("Big text"),
+              ),
+            ),
+            SizedBox(
+              width: 225,
+              child: SwitchListTile(
+                value: _includeAuthor,
+                onChanged: (b) {
+                  setState(() {
+                    _includeAuthor = b;
+                  });
+                },
+                title: Text("Include title"),
+              ),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          spacing: 12.0,
+          children: [
+            FilledButton(
+              onPressed: () {
+                _captureAndSave(context);
+              },
+              child: Text("Save"),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(
+                  ColorScheme.of(context).secondary,
+                ),
+              ),
+              child: Text("Close"),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
