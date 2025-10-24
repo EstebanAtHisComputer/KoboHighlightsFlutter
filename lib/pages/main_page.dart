@@ -106,7 +106,11 @@ class _MainPageState extends State<MainPage> {
         toolbarHeight: 72,
         title: Column(
           children: [
-            Text(selectedTitle),
+            Tooltip(
+              message: selectedTitle,
+              waitDuration: Duration(milliseconds: 500),
+              child: Text(selectedTitle),
+            ),
             CallbackShortcuts(
               bindings: {
                 const SingleActivator(LogicalKeyboardKey.arrowLeft): () {
