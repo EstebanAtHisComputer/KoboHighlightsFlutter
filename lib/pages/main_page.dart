@@ -45,25 +45,31 @@ class _MainPageState extends State<MainPage> {
   }
 
   void _exportHighlight(BuildContext context, String text) async {
-    final String fileName = "$selectedTitle.txt";
-    final FileSaveLocation? result = await getSaveLocation(
-      suggestedName: fileName,
-      acceptedTypeGroups: [
-        XTypeGroup(label: "Text file", extensions: [".txt"]),
-      ],
-    );
-    if (result == null) {
-      return;
-    }
+    try {
+      final String fileName = "$selectedTitle.txt";
+      final FileSaveLocation? result = await getSaveLocation(
+        suggestedName: fileName,
+        acceptedTypeGroups: [
+          XTypeGroup(label: "Text file", extensions: [".txt"]),
+        ],
+      );
+      if (result == null) {
+        return;
+      }
 
-    final Uint8List fileData = utf8.encode(text);
-    final file = File(result.path);
-    await file.writeAsBytes(fileData);
+      final Uint8List fileData = utf8.encode(text);
+      final file = File(result.path);
+      await file.writeAsBytes(fileData);
 
-    if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+      if (context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Highlight exported!")));
+      }
+    } catch (e) {
+      if (context.mounted) {
+        errorDialog(context, "Error exporting highlight", e.toString());
+      }
     }
   }
 

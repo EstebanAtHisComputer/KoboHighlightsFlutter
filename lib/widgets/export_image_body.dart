@@ -5,6 +5,7 @@ import 'dart:ui' as ui;
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:kobo_highlights/utils.dart';
 
 class ExportImageBody extends StatefulWidget {
   final String text;
@@ -53,7 +54,9 @@ class _ExportImageBodyState extends State<ExportImageBody> {
         Navigator.of(context).pop();
       }
     } catch (e) {
-      throw Exception(e);
+      if (context.mounted) {
+        await errorDialog(context, "Error exporting image", e.toString());
+      }
     }
   }
 
