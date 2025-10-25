@@ -202,14 +202,14 @@ class _MainPageState extends State<MainPage> {
             waitDuration: Duration(seconds: 1),
             child: MenuAnchor(
               menuChildren: [
-                selectedIndex > -1
-                    ? MenuItemButton(
-                        child: Text("Export all"),
-                        onPressed: () {
+                MenuItemButton(
+                  onPressed: selectedIndex > -1
+                      ? () {
                           _exportAll(context);
-                        },
-                      )
-                    : SizedBox.shrink(),
+                        }
+                      : null,
+                  child: Text("Export all"),
+                ),
                 MenuItemButton(
                   child: Text("About this app..."),
                   onPressed: () {
