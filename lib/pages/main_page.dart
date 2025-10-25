@@ -137,46 +137,46 @@ class _MainPageState extends State<MainPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    selectedIndex > 0
-                        ? Tooltip(
-                            message: "Previous book (Left arrow)",
-                            waitDuration: Duration(seconds: 1),
-                            child: IconButton(
-                              style: ButtonStyle(
-                                mouseCursor: WidgetStatePropertyAll(
-                                  SystemMouseCursors.basic,
-                                ),
-                              ),
-                              onPressed: () {
+                    Tooltip(
+                      message: "Previous book (Left arrow)",
+                      waitDuration: Duration(seconds: 1),
+                      child: IconButton(
+                        style: ButtonStyle(
+                          mouseCursor: WidgetStatePropertyAll(
+                            SystemMouseCursors.basic,
+                          ),
+                        ),
+                        onPressed: selectedIndex > 0
+                            ? () {
                                 selectedIndex--;
                                 setState(() {
                                   _changeSelected(selectedIndex);
                                 });
-                              },
-                              icon: Icon(Icons.arrow_circle_left_outlined),
-                            ),
-                          )
-                        : SizedBox.shrink(),
-                    selectedIndex < highlights.keys.length - 1
-                        ? Tooltip(
-                            message: "Next book (Right arrow)",
-                            waitDuration: Duration(seconds: 1),
-                            child: IconButton(
-                              style: ButtonStyle(
-                                mouseCursor: WidgetStatePropertyAll(
-                                  SystemMouseCursors.basic,
-                                ),
-                              ),
-                              onPressed: () {
+                              }
+                            : null,
+                        icon: Icon(Icons.arrow_circle_left_outlined),
+                      ),
+                    ),
+                    Tooltip(
+                      message: "Next book (Right arrow)",
+                      waitDuration: Duration(seconds: 1),
+                      child: IconButton(
+                        style: ButtonStyle(
+                          mouseCursor: WidgetStatePropertyAll(
+                            SystemMouseCursors.basic,
+                          ),
+                        ),
+                        onPressed: selectedIndex < highlights.keys.length - 1
+                            ? () {
                                 selectedIndex++;
                                 setState(() {
                                   _changeSelected(selectedIndex);
                                 });
-                              },
-                              icon: Icon(Icons.arrow_circle_right_outlined),
-                            ),
-                          )
-                        : SizedBox.shrink(),
+                              }
+                            : null,
+                        icon: Icon(Icons.arrow_circle_right_outlined),
+                      ),
+                    ),
                   ],
                 ),
               ),
