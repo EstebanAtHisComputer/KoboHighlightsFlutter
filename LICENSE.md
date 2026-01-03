@@ -1,39 +1,4 @@
-import 'package:flutter/material.dart';
-
-Future<void> errorDialog(BuildContext context, String title, String text) {
-  return showDialog(
-    context: context,
-    requestFocus: true,
-    barrierDismissible: false,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        icon: Icon(Icons.error),
-        title: Text(title),
-        content: Text(text),
-        actions: [
-          FilledButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("Ok"),
-          ),
-        ],
-      );
-    },
-  );
-}
-
-void showAbout(BuildContext context) {
-  showAboutDialog(
-    context: context,
-    applicationIcon: Image(
-      image: Theme.of(context).brightness == Brightness.dark
-          ? AssetImage("assets/logo.png")
-          : AssetImage("assets/logo_black.png"),
-      height: 128.0,
-    ),
-    applicationVersion: "1.0",
-    applicationLegalese: """MIT License
+MIT License
 
 Copyright (c) 2026 EstebanAtHisComputer
 
@@ -57,6 +22,3 @@ SOFTWARE.
 
 KOBO is a registered trademark owned by RAKUTEN KOBO INC., a TORONTO, ONTARIO based entity.
 This software is not affiliated, associated, authorized, or endorsed in any way by RAKUTEN KOBO INC.
-""",
-  );
-}
