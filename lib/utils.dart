@@ -30,7 +30,7 @@ void showAbout(BuildContext context) {
     applicationVersion: "1.0",
     applicationLegalese: """MIT License
 
-Copyright (c) 2025 EstebanAtHisComputer
+Copyright (c) 2026 EstebanAtHisComputer
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

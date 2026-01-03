@@ -15,7 +15,11 @@ class IntroPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Image(image: AssetImage("assets/logo.png")),
+            Image(
+              image: Theme.of(context).brightness == Brightness.dark
+                  ? AssetImage("assets/logo.png")
+                  : AssetImage("assets/logo_black.png"),
+            ),
             FilledButton(
               onPressed: () async {
                 XFile? file = await openFile();
