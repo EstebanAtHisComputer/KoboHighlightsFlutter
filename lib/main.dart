@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:window_manager_plus/window_manager_plus.dart';
 
 import 'package:kobo_highlights/pages/intro_page.dart';
+import 'dart:io' show Platform;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await WindowManagerPlus.ensureInitialized(0);
-  WindowOptions windowOptions = const WindowOptions(
-    size: Size(855, 861),
-    center: true,
-    title: "Kobo Highlights",
-    titleBarStyle: TitleBarStyle.normal,
-    skipTaskbar: false,
-  );
-  WindowManagerPlus.current.waitUntilReadyToShow(windowOptions, () async {
-    await WindowManagerPlus.current.show();
-  });
+  if (Platform.isWindows) {
+    await WindowManagerPlus.ensureInitialized(0);
+    WindowOptions windowOptions = const WindowOptions(
+      size: Size(855, 861),
+      center: true,
+      title: "Kobo Highlights",
+      titleBarStyle: TitleBarStyle.normal,
+      skipTaskbar: false,
+    );
+    WindowManagerPlus.current.waitUntilReadyToShow(windowOptions, () async {
+      await WindowManagerPlus.current.show();
+    });
+  }
   runApp(const MyApp());
 }
 
