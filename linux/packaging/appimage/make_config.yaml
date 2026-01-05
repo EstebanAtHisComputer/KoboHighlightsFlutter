@@ -1,0 +1,10 @@
+display_name: Kobo Highlights
+icon: assets/logo_parchment.png
+keywords:
+  - Kobo
+  - Highlights
+  - eReader
+generic_name: Kobo Highlights
+categories:
+   - Productivity
+startup_notify: true
