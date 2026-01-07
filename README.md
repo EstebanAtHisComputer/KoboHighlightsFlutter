@@ -8,6 +8,8 @@ Note that this application has only been tested with a database obtained from a 
 No installation is required. Unzip the compressed folder in your prefered location and run the .exe file.
 ### Linux
 No installation is required. You can directly execute the `.appimage` file to launch the application.
+### MacOS / Mobile / Web / Others
+The project has not been tested to work on any platforms other than Windows and Linux and correct functionality can't be confirmed at this time in any other platform. Issues and pull requests oriented to document and fix functionality on those platforms would be greatly appreciated.
 
 ## Building from source
 * Make sure you have Flutter installed and properly configured on your system. You can find instructions to do so on [Flutter's official docs](https://docs.flutter.dev/get-started).
