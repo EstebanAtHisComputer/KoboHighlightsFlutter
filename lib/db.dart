@@ -26,4 +26,5 @@ text is not null;
         .putIfAbsent((title, author), () => [])
         .add(entry['Text'] as String);
   }
+  await db.close();
 }
