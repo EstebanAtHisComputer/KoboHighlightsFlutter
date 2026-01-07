@@ -48,7 +48,9 @@ We also support packaging the application into an AppImage,using [FastForge](htt
 ## Usage
 ### The main screen
 ![Intro screen of the app](docs/screenshot_intro.png)
+
 Upon loading the application, click the "Open" button to select your `KoboReader.sqlite` file. It should be situated on the `.kobo` hidden folder of your eReader, but the location may vary depending on the specific model of your eReader and the configuration of your operating system. If you can't locate this file, please search online for the specific path appropiate to your use case.
+
 To prevent any possible issues (in case of a fauly connection, a accidentaly disconnected device, etc) we heavily recommend making a copy of this file to your computer and loading this copy instead of loading directly from the device.
 ![Sidebar of the app, showing a list of books](docs/screenshot_sidebar.png)
 If the database has been loaded correctly, the main interface will show up and the sidebar will automatically open. This sidebar will display every book that has at least one highlight stored on your device. You can scroll up and down the list with the mouse wheel or by using the scroll bar. If you close the sidebar by mistake (by clicking outside of it), you can reopen it by clicking on the `Open book list` (![Book list icon](docs/menu-book.png)) icon.
