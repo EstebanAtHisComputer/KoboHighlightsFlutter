@@ -38,6 +38,7 @@ dependencies:
   file_selector: ^1.0.4
   sqflite_common_ffi: ^2.4.0+2
   sqlite3: ">=3.0.0"
+  package_info_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
