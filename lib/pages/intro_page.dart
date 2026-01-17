@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:kobo_highlights/db.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 import './main_page.dart';
 import '../utils.dart';
@@ -44,6 +45,53 @@ class _IntroPageState extends State<IntroPage> {
     } else {
       throw Exception("Couldn't fetch updates");
     }
+  }
+
+  Future<void> showUpdateDialog(
+    BuildContext context,
+    GithubJSONResponse response,
+  ) {
+    return showDialog(
+      context: context,
+      requestFocus: true,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          icon: Icon(Icons.error),
+          title: Text("Update available"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("An update is available: ${response.tagName}"),
+              SizedBox(height: 20.0),
+              Container(
+                color: Theme.of(context).colorScheme.surfaceBright,
+                child: Text(response.body),
+              ),
+              SizedBox(height: 20.0),
+              Text("Would you like to open the downloads page?"),
+            ],
+          ),
+          actions: [
+            FilledButton(
+              onPressed: () async {
+                final Uri url = Uri.parse(response.url);
+                if (!await launchUrl(url)) {
+                  throw Exception("Failed to launch browser");
+                }
+              },
+              child: const Text("Yes"),
+            ),
+            FilledButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("No"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -111,7 +159,22 @@ class _IntroPageState extends State<IntroPage> {
                   if (snapshot.hasData) {
                     String ver = snapshot.data!.tagName;
                     if (ver != appVersion) {
-                      return Text(" (Update available: $ver)");
+                      return TextButton(
+                        style: ButtonStyle(
+                          textStyle: WidgetStateTextStyle.resolveWith(
+                            (states) =>
+                                TextStyle(decoration: TextDecoration.underline),
+                          ),
+                          splashFactory: NoSplash.splashFactory,
+                          overlayColor: WidgetStateColor.resolveWith(
+                            (x) => Colors.transparent,
+                          ),
+                        ),
+                        onPressed: () {
+                          showUpdateDialog(context, snapshot.data!);
+                        },
+                        child: Text("(Update available: $ver)"),
+                      );
                     } else {
                       return Text(" (latest)");
                     }
